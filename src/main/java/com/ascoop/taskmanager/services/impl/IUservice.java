@@ -4,7 +4,6 @@ import com.ascoop.taskmanager.model.User;
 import com.ascoop.taskmanager.repository.UserRepository;
 import com.ascoop.taskmanager.services.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,12 +26,13 @@ public class IUservice implements UserService {
     }
 
     @Override
-    public void saveUser(User user)  {
+    public Long saveUser(User user)  {
         if (user.getPassword() == null) {
             user.setPassword(null);
         } else {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
-        userRepository.save(user);
+       User userSave =  userRepository.save(user);
+        return userSave.getId();
     }
 }

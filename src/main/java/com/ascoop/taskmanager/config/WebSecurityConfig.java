@@ -96,12 +96,8 @@ public class WebSecurityConfig {
         NimbusJwtDecoder googleDecoder = JwtDecoders.fromIssuerLocation("https://accounts.google.com");
 
         return token -> {
-            System.out.println("google url redirect ********************************");
-            System.out.println(token);
                 String issuer = extractIssuer(token);
                 if ("https://accounts.google.com".equals(issuer)){
-                    System.out.println("google url redirect ********************************");
-                    System.out.println(token);
                     return googleDecoder.decode(token);
                 }else {
                     return customDecoder.decode(token);

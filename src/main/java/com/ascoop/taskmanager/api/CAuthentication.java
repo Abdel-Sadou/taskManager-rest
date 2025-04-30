@@ -26,9 +26,9 @@ public class CAuthentication {
     public ResponseEntity<String> auth() {
           return ResponseEntity.ok("Hello");
     }
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user) {
-            userService.saveUser(user);
-            return ResponseEntity.ok("User registered successfully"+user.getUsername());
+            return ResponseEntity.ok(userService.saveUser(user));
     }
 }
