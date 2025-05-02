@@ -27,12 +27,20 @@ public class IUservice implements UserService {
 
     @Override
     public Long saveUser(User user)  {
-        if (user.getPassword() == null) {
-            user.setPassword(null);
-        } else {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-        }
-       User userSave =  userRepository.save(user);
+       /* if (userRepository.existsByEmail(user.getEmail())) {
+            throw  new RuntimeException("Email Already Exists");
+        }*/
+        User userSave =   userRepository.findByEmail(user.getEmail()).orElseGet(() -> {
+             if (user.getPassword() == null) {
+                 user.setPassword(null);
+             } else {
+                 user.setPassword(passwordEncoder.encode(user.getPassword()));
+             }
+            System.out.println(user);
+            System.out.println("*******************************************************  userRepository.findByEmail erRepository.save **************");
+                return userRepository.save(user);
+            });
+
         return userSave.getId();
     }
 }

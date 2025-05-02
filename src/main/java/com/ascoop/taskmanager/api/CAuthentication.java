@@ -22,6 +22,12 @@ public class CAuthentication {
         System.out.println(authRequest);
           return ResponseEntity.ok(authService.generateAccessToken(authRequest.getUsername(), authRequest.getPassword()));
     }
+    @PostMapping("authWithGoogle")
+    public ResponseEntity<Map<String, Object>> authWithGoogle(@RequestBody AuthRequest authRequest) {
+        System.out.println("**********");
+        System.out.println(authRequest);
+          return ResponseEntity.ok(authService.generateAccessToken(authRequest.getUsername(), authRequest.getPassword()));
+    }
     @GetMapping("hello")
     public ResponseEntity<String> auth() {
           return ResponseEntity.ok("Hello");

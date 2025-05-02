@@ -2,10 +2,7 @@ package com.ascoop.taskmanager.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
 
@@ -20,8 +17,10 @@ public class User {
     private Long id;
     private String username;
     private String role;
+    @Column(unique = true)
     private String email;
     private String password;
+    private String providerId;
     private boolean enabled;
     @OneToMany(mappedBy = "user")
     private List<Task> tasks;

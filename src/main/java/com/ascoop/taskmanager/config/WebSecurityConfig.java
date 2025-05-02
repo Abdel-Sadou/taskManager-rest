@@ -1,5 +1,7 @@
 package com.ascoop.taskmanager.config;
 
+import com.ascoop.taskmanager.model.User;
+import com.ascoop.taskmanager.repository.UserRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.jwk.JWK;
@@ -21,9 +23,15 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
@@ -32,7 +40,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.io.IOException;
 import java.util.Base64;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Configuration
 @EnableWebSecurity
@@ -121,4 +131,34 @@ public class WebSecurityConfig {
             throw new RuntimeException("Invalid JWT", e);
         }
     }
+  /*  @Bean
+    public OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService(UserRepository userRepository) {
+        return userRequest -> {
+            OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
+            OAuth2User oAuth2User = delegate.loadUser(userRequest);
+
+            String email = oAuth2User.getAttribute("email");
+            String name = oAuth2User.getAttribute("name");
+            String googleId = oAuth2User.getAttribute("sub"); // identifiant unique chez Google
+            System.out.println("OAuth2UserService---------");
+            System.out.println(Optional.ofNullable(oAuth2User.getAttribute("email")));
+            System.out.println("OAuth2UserService---------");
+          *//*  User user = userRepository.findByEmail(email).orElseGet(() -> {
+                // Première connexion : on crée l'utilisateur
+                User newUser = new User();
+                newUser.setEmail(email);
+                newUser.setUsername(name);
+                newUser.setProviderId(googleId); // pour identifier Google
+                return userRepository.save(newUser);
+            });*//*
+
+            // Authentification réussie, on renvoie l'utilisateur Spring
+            return new DefaultOAuth2User(
+                    Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),
+                    oAuth2User.getAttributes(),
+                    "sub" // clé de l'attribut principal
+            );
+        };
+    }*/
+
 }
