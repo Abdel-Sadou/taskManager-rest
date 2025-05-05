@@ -64,7 +64,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests((requests) -> {
 
-                    requests.requestMatchers("auth","register","hello").permitAll().
+                    requests.requestMatchers("auth/**","register","hello").permitAll().
                             anyRequest().authenticated();
 
                 })
@@ -101,9 +101,9 @@ public class WebSecurityConfig {
     @Bean
     JwtDecoder jwtDecoder() {
         //decoder custom avec rsa
-        JwtDecoder customDecoder = NimbusJwtDecoder.withPublicKey(rsaKeyConfig.publicKey()).build();
+       /// JwtDecoder customDecoder = NimbusJwtDecoder.withPublicKey(rsaKeyConfig.publicKey()).build();
         // Google decoder
-        NimbusJwtDecoder googleDecoder = JwtDecoders.fromIssuerLocation("https://accounts.google.com");
+       /* NimbusJwtDecoder googleDecoder = JwtDecoders.fromIssuerLocation("https://accounts.google.com");
 
         return token -> {
                 String issuer = extractIssuer(token);
@@ -112,7 +112,8 @@ public class WebSecurityConfig {
                 }else {
                     return customDecoder.decode(token);
                 }
-        };
+        };*/
+      return   NimbusJwtDecoder.withPublicKey(rsaKeyConfig.publicKey()).build();
     }
 
     @Bean

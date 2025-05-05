@@ -27,9 +27,9 @@ public class IUservice implements UserService {
 
     @Override
     public Long saveUser(User user)  {
-       /* if (userRepository.existsByEmail(user.getEmail())) {
+        if (userRepository.existsByEmail(user.getEmail())) {
             throw  new RuntimeException("Email Already Exists");
-        }*/
+        }
         User userSave =   userRepository.findByEmail(user.getEmail()).orElseGet(() -> {
              if (user.getPassword() == null) {
                  user.setPassword(null);

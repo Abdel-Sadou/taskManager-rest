@@ -42,7 +42,7 @@ public class AuthService {
             authentication.getAuthorities()
                     .stream().map(GrantedAuthority::getAuthority)
                     .collect(Collectors.joining(" "));*/
-            return buildAccessToken(subject);
+            return buildAccessToken(subject, false);
         } catch (UsernameNotFoundException e) {
             throw new UsernameNotFoundException(e.getMessage());
         } catch (CredentialsExpiredException e) {
@@ -60,11 +60,11 @@ public class AuthService {
         }
     }
 
-    private Map<String, Object> buildAccessToken(String subject) {
+    public Map<String, Object> buildAccessToken(String subject , boolean isGoogle) {
         Instant instant = Instant.now();
         int accessTokenTimeOut = 12;
         Instant tokenExpireAt = instant.plus(accessTokenTimeOut, ChronoUnit.HOURS);
-        UserDTO userDTO =  userRepository.findByUsername(subject).map(UserDTO::new).get();
+        UserDTO userDTO =  isGoogle?userRepository.findByEmail(subject).map(UserDTO::new).get(): userRepository.findByUsername(subject).map(UserDTO::new).get();
         JwtClaimsSet jwtClaimsSet = JwtClaimsSet.builder()
                 .subject(subject)
                 .issuedAt(instant)
